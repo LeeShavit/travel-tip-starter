@@ -9,6 +9,10 @@
     --gray1: lightgray;
 }
 
+h1 {
+    color: #293241;
+}
+
 /* Another theme */
 /* :root {
     --bg1: rgb(37, 13, 195);
