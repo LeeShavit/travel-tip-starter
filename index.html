@@ -68,6 +68,13 @@
             </section>
         </div>
     </main>
+    <dialog class="update-loc-modal">
+        <label for="loc-name">Name</label>
+        <input id="loc-name" name="loc-name">
+        <label for="loc-rate">Rate</label>
+        <input id="loc-rate" name="loc-rate">
+        <button onclick="app.onUpdateLoc()">Save</button>
+    </dialog>
     <pre class="debug" hidden></pre>
     <div class="user-msg"></div>
     <script type="module" src="js/app.controller.js"></script>
