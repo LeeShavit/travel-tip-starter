@@ -18,6 +18,8 @@ window.app = {
     onSetFilterBy,
 }
 
+let gUserPos = null
+
 function onInit() {
     loadAndRenderLocs()
 
@@ -37,11 +39,15 @@ function renderLocs(locs) {
     // console.log('locs:', locs)
     var strHTML = locs.map(loc => {
         const className = (loc.id === selectedLocId) ? 'active' : ''
+        const latLng= {lat: loc.geo.lat, lng: loc.geo.lng}
 
         return `
         <li class="loc ${className}" data-id="${loc.id}">
             <h4>  
                 <span>${loc.name}</span>
+                ${(gUserPos) ?
+                    `<span>Distance: ${utilService.getDistance(gUserPos,latLng)} KM</span>`
+                    : ''}
                 <span title="${loc.rate} stars">${'★'.repeat(loc.rate)}</span>
             </h4>
             <p class="muted">
@@ -70,7 +76,7 @@ function renderLocs(locs) {
 }
 
 function onRemoveLoc(locId) {
-    if(confirm('Do you really want to delete?')){
+    if (confirm('Do you really want to delete?')) {
         locService.remove(locId)
             .then(() => {
                 flashMsg('Location removed')
@@ -131,6 +137,7 @@ function onPanToUserPos() {
     mapService.getUserPosition()
         .then(latLng => {
             mapService.panTo({ ...latLng, zoom: 15 })
+            gUserPos= latLng
             unDisplayLoc()
             loadAndRenderLocs()
             flashMsg(`You are at Latitude: ${latLng.lat} Longitude: ${latLng.lng}`)
@@ -182,6 +189,12 @@ function displayLoc(loc) {
     el.querySelector('.loc-address').innerText = loc.geo.address
     el.querySelector('.loc-rate').innerHTML = '★'.repeat(loc.rate)
     el.querySelector('[name=loc-copier]').value = window.location
+
+    if(gUserPos){
+        const latLng= {lat: loc.geo.lat, lng: loc.geo.lng}
+        el.querySelector('.loc-distance').innerText= `Distance ${utilService.getDistance(gUserPos,latLng)} KM`
+    }
+
     el.classList.add('show')
 
     utilService.updateQueryParams({ locId: loc.id })
