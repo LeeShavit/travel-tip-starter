@@ -103,3 +103,4 @@ function _connectGoogleApi() {
         elGoogleApi.onerror = () => reject('GoogleMaps script failed to load')
     })
 }
+
