@@ -37,6 +37,7 @@ function renderLocs(locs) {
     // console.log('locs:', locs)
     var strHTML = locs.map(loc => {
         const className = (loc.id === selectedLocId) ? 'active' : ''
+
         return `
         <li class="loc ${className}" data-id="${loc.id}">
             <h4>  
@@ -69,16 +70,18 @@ function renderLocs(locs) {
 }
 
 function onRemoveLoc(locId) {
-    locService.remove(locId)
-        .then(() => {
-            flashMsg('Location removed')
-            unDisplayLoc()
-            loadAndRenderLocs()
-        })
-        .catch(err => {
-            console.error('OOPs:', err)
-            flashMsg('Cannot remove location')
-        })
+    if(confirm('Do you really want to delete?')){
+        locService.remove(locId)
+            .then(() => {
+                flashMsg('Location removed')
+                unDisplayLoc()
+                loadAndRenderLocs()
+            })
+            .catch(err => {
+                console.error('OOPs:', err)
+                flashMsg('Cannot remove location')
+            })
+    }
 }
 
 function onSearchAddress(ev) {
